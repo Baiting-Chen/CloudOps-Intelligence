@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudops-intelligence.example/schemas/service.schema.json",
+  "title": "CloudOps Virtual Service Definition",
+  "description": "Definition of one service in the controlled virtual company.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "service",
+    "runtime",
+    "responsibility",
+    "dependencies",
+    "owned_resources",
+    "signals",
+    "access_scope"
+  ],
+  "properties": {
+    "service": {
+      "enum": [
+        "checkout-api",
+        "inventory-api",
+        "notification-worker"
+      ]
+    },
+    "runtime": {
+      "enum": [
+        "ecs-fargate-api",
+        "ecs-fargate-worker"
+      ]
+    },
+    "responsibility": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dependencies": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      }
+    },
+    "owned_resources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      }
+    },
+    "signals": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9][a-z0-9_]*$"
+      }
+    },
+    "access_scope": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudops-intelligence.example/schemas/eval-questions.schema.json",
+  "title": "CloudOps RAG Evaluation Question Set",
+  "description": "Phase 0 retrieval and generation evaluation questions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "questions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    }
+  },
+  "$defs": {
+    "documentId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyFact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service",
+        "environment"
+      ],
+      "properties": {
+        "service": {
+          "enum": [
+            "checkout-api",
+            "inventory-api",
+            "notification-worker"
+          ]
+        },
+        "environment": {
+          "enum": [
+            "production",
+            "staging"
+          ]
+        },
+        "incident_type": {
+          "enum": [
+            "ecs_deployment_misconfiguration",
+            "rds_connection_pool_exhaustion",
+            "downstream_service_timeout",
+            "sqs_queue_backlog",
+            "worker_out_of_memory"
+          ]
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "query",
+        "filters",
+        "as_of",
+        "relevant_documents",
+        "expected_facts",
+        "forbidden_claims",
+        "should_refuse"
+      ],
+      "properties": {
+        "query_id": {
+          "type": "string",
+          "pattern": "^Q-[0-9]{3}$"
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "filters": {
+          "$ref": "#/$defs/filters"
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "relevant_documents": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/documentId"
+          }
+        },
+        "expected_facts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyFact"
+          }
+        },
+        "forbidden_claims": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyFact"
+          }
+        },
+        "should_refuse": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
