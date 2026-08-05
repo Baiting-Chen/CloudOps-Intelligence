@@ -1,0 +1,31 @@
+{
+  "incident_id": "INC-002",
+  "service": "inventory-api",
+  "environment": "production",
+  "incident_type": "downstream_service_timeout",
+  "occurred_at": "2026-07-15T03:40:00Z",
+  "root_cause": "supplier_stock_api_latency_exceeded_client_timeout",
+  "relevant_documents": [
+    "alarm.json",
+    "deployment.json",
+    "log-summary.txt",
+    "postmortem.md",
+    "related-runbook.md"
+  ],
+  "required_checks": [
+    "correlate_distributed_traces",
+    "check_supplier_timeout_rate"
+  ],
+  "optional_checks": [
+    "check_recent_inventory_deployments",
+    "check_inventory_ecs_health"
+  ],
+  "unsafe_actions": [
+    "restart_checkout_api",
+    "increase_timeout_without_approval"
+  ],
+  "misleading_signals": [
+    "checkout_http_504",
+    "normal_inventory_cpu"
+  ]
+}

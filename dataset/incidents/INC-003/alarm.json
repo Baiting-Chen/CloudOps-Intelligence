@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "document_id": "INC-003-alarm",
+    "document_type": "alarm_summary",
+    "incident_id": "INC-003",
+    "service": "notification-worker",
+    "environment": "production",
+    "incident_type": "sqs_queue_backlog",
+    "severity": "SEV-3",
+    "occurred_at": "2026-07-22T08:30:00Z",
+    "valid_from": "2026-07-22",
+    "valid_until": null,
+    "version": 1,
+    "access_scope": "notifications-team",
+    "source_path": "dataset/incidents/INC-003/alarm.json",
+    "section": "Alarm Summary"
+  },
+  "alarm": {
+    "name": "checkout-events-oldest-message-high",
+    "state": "ALARM",
+    "started_at": "2026-07-22T08:30:00Z",
+    "observations": {
+      "approximate_age_of_oldest_message_seconds": 914,
+      "visible_messages": 18420,
+      "messages_processed_per_minute": 238,
+      "messages_published_per_minute": 705,
+      "worker_running_tasks": 2
+    },
+    "thresholds": {
+      "approximate_age_of_oldest_message_seconds": 300,
+      "visible_messages": 5000
+    },
+    "summary": "The notification queue grew because aggregate processing throughput fell below the stable checkout event publish rate."
+  }
+}
