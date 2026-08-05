@@ -1,0 +1,21 @@
+{
+  "service": "notification-worker",
+  "runtime": "ecs-fargate-worker",
+  "responsibility": "Consume checkout events from SQS and send customer notifications through the simulated notification provider.",
+  "dependencies": [
+    "checkout-events-sqs",
+    "notification-provider"
+  ],
+  "owned_resources": [
+    "notification-worker-ecs-service",
+    "notification-worker-task-definition"
+  ],
+  "signals": [
+    "sqs_approximate_age_of_oldest_message",
+    "sqs_visible_messages",
+    "messages_processed_per_minute",
+    "ecs_memory_utilization",
+    "worker_task_exit_count"
+  ],
+  "access_scope": "notifications-team"
+}

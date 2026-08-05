@@ -1,0 +1,10 @@
+---
+{"document_id":"INC-001-log-summary","document_type":"log_summary","incident_id":"INC-001","service":"checkout-api","environment":"production","incident_type":"rds_connection_pool_exhaustion","severity":"SEV-2","occurred_at":"2026-07-08T10:20:00Z","valid_from":"2026-07-08","valid_until":null,"version":1,"access_scope":"checkout-team","source_path":"dataset/incidents/INC-001/log-summary.txt","section":"Application Log Summary"}
+---
+Window: 2026-07-08T10:15:00Z to 2026-07-08T10:35:00Z
+
+- 1,842 occurrences of `SQLTransientConnectionException: connection is not available, request timed out after 3000ms`.
+- Errors were emitted by checkout-api tasks running task definition `checkout-api:42`.
+- The median active connection count was 8 of 8 and pending acquisition requests peaked at 73.
+- No PostgreSQL authentication failure, RDS failover event, or network connection reset was observed.
+- Inventory-api latency remained within its normal range during the same window.

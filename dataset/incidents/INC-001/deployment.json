@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "document_id": "INC-001-deployment",
+    "document_type": "deployment",
+    "incident_id": "INC-001",
+    "service": "checkout-api",
+    "environment": "production",
+    "incident_type": "rds_connection_pool_exhaustion",
+    "severity": "SEV-2",
+    "occurred_at": "2026-07-08T10:20:00Z",
+    "valid_from": "2026-07-08",
+    "valid_until": null,
+    "version": 1,
+    "access_scope": "checkout-team",
+    "source_path": "dataset/incidents/INC-001/deployment.json",
+    "section": "Task Definition Diff"
+  },
+  "deployment": {
+    "deployed_at": "2026-07-08T10:05:00Z",
+    "previous_task_definition": "checkout-api:41",
+    "current_task_definition": "checkout-api:42",
+    "image_changed": false,
+    "configuration_diff": {
+      "DB_MAX_POOL_SIZE": {
+        "before": "40",
+        "after": "8"
+      },
+      "DB_MIN_IDLE": {
+        "before": "10",
+        "after": "2"
+      }
+    },
+    "change_ticket": "CHG-2042",
+    "rollback_available": true
+  }
+}

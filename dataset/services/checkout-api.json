@@ -1,0 +1,21 @@
+{
+  "service": "checkout-api",
+  "runtime": "ecs-fargate-api",
+  "responsibility": "Accept checkout requests, reserve inventory, persist order data, and publish checkout events for asynchronous notification processing.",
+  "dependencies": [
+    "inventory-api",
+    "postgresql-rds",
+    "checkout-events-sqs"
+  ],
+  "owned_resources": [
+    "checkout-api-ecs-service",
+    "checkout-api-task-definition"
+  ],
+  "signals": [
+    "http_5xx_rate",
+    "http_p95_latency_ms",
+    "db_connection_wait_ms",
+    "ecs_running_task_count"
+  ],
+  "access_scope": "checkout-team"
+}

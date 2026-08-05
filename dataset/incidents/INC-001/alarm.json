@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "document_id": "INC-001-alarm",
+    "document_type": "alarm_summary",
+    "incident_id": "INC-001",
+    "service": "checkout-api",
+    "environment": "production",
+    "incident_type": "rds_connection_pool_exhaustion",
+    "severity": "SEV-2",
+    "occurred_at": "2026-07-08T10:20:00Z",
+    "valid_from": "2026-07-08",
+    "valid_until": null,
+    "version": 1,
+    "access_scope": "checkout-team",
+    "source_path": "dataset/incidents/INC-001/alarm.json",
+    "section": "Alarm Summary"
+  },
+  "alarm": {
+    "name": "checkout-api-p95-latency-high",
+    "state": "ALARM",
+    "started_at": "2026-07-08T10:20:00Z",
+    "observations": {
+      "http_p95_latency_ms": 4820,
+      "http_5xx_rate_percent": 7.8,
+      "db_connection_wait_ms_p95": 3910,
+      "rds_cpu_percent": 58
+    },
+    "thresholds": {
+      "http_p95_latency_ms": 1500,
+      "rds_cpu_saturation_percent": 80
+    },
+    "summary": "Checkout latency and database connection wait time increased fifteen minutes after task definition 42 was deployed. RDS CPU increased moderately but remained below the configured saturation threshold."
+  }
+}

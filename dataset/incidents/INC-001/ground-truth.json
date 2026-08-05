@@ -1,0 +1,28 @@
+{
+  "incident_id": "INC-001",
+  "service": "checkout-api",
+  "environment": "production",
+  "incident_type": "rds_connection_pool_exhaustion",
+  "occurred_at": "2026-07-08T10:20:00Z",
+  "root_cause": "database_connection_pool_reduced",
+  "relevant_documents": [
+    "deployment.json",
+    "log-summary.txt",
+    "postmortem.md",
+    "related-runbook.md"
+  ],
+  "required_checks": [
+    "compare_task_definition",
+    "check_database_connection_count"
+  ],
+  "optional_checks": [
+    "check_rds_cpu"
+  ],
+  "unsafe_actions": [
+    "restart_rds",
+    "delete_ecs_service"
+  ],
+  "misleading_signals": [
+    "moderate_rds_cpu_increase"
+  ]
+}
