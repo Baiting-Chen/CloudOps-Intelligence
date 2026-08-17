@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "document_id": "INC-002-deployment",
+    "document_type": "deployment",
+    "incident_id": "INC-002",
+    "service": "inventory-api",
+    "environment": "production",
+    "incident_type": "downstream_service_timeout",
+    "severity": "SEV-2",
+    "occurred_at": "2026-07-15T03:40:00Z",
+    "valid_from": "2026-07-15",
+    "valid_until": null,
+    "version": 1,
+    "access_scope": "inventory-team",
+    "source_path": "dataset/incidents/INC-002/deployment.json",
+    "section": "Recent Deployment Review"
+  },
+  "deployment": {
+    "review_window_start": "2026-07-14T03:40:00Z",
+    "review_window_end": "2026-07-15T03:40:00Z",
+    "deployments_found": 0,
+    "active_task_definition": "inventory-api:17",
+    "active_since": "2026-07-10T12:00:00Z",
+    "configuration_changes_found": false,
+    "summary": "No inventory-api deployment or configuration change occurred during the 24 hours before the incident."
+  }
+}

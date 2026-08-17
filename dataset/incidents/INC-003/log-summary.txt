@@ -1,0 +1,11 @@
+---
+{"document_id":"INC-003-log-summary","document_type":"log_summary","incident_id":"INC-003","service":"notification-worker","environment":"production","incident_type":"sqs_queue_backlog","severity":"SEV-3","occurred_at":"2026-07-22T08:30:00Z","valid_from":"2026-07-22","valid_until":null,"version":1,"access_scope":"notifications-team","source_path":"dataset/incidents/INC-003/log-summary.txt","section":"Worker Log Summary"}
+---
+Window: 2026-07-22T08:15:00Z to 2026-07-22T08:45:00Z
+
+- Both running worker tasks continued acknowledging messages successfully.
+- Per-task throughput remained near 119 messages per minute, matching the previous baseline.
+- No `OutOfMemoryError`, container exit, visibility-timeout expiration, or notification-provider throttling was observed.
+- Aggregate throughput fell from approximately 714 to 238 messages per minute after the running task count changed from six to two.
+- The checkout event publish rate remained near 705 messages per minute.
+- Aggregate worker CPU and memory declined because fewer tasks were running.

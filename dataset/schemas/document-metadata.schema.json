@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudops-intelligence.example/schemas/document-metadata.schema.json",
+  "title": "CloudOps Ingestible Document Metadata",
+  "description": "Common metadata required on every ingestible Markdown, JSON, or TXT document.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document_id",
+    "document_type",
+    "incident_id",
+    "service",
+    "environment",
+    "incident_type",
+    "severity",
+    "occurred_at",
+    "valid_from",
+    "valid_until",
+    "version",
+    "access_scope",
+    "source_path",
+    "section"
+  ],
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "document_type": {
+      "enum": [
+        "architecture",
+        "runbook",
+        "postmortem",
+        "alarm_summary",
+        "deployment",
+        "log_summary",
+        "distractor"
+      ]
+    },
+    "incident_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^INC-[0-9]{3}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "service": {
+      "enum": [
+        "checkout-api",
+        "inventory-api",
+        "notification-worker"
+      ]
+    },
+    "environment": {
+      "enum": [
+        "production",
+        "staging"
+      ]
+    },
+    "incident_type": {
+      "enum": [
+        "ecs_deployment_misconfiguration",
+        "rds_connection_pool_exhaustion",
+        "downstream_service_timeout",
+        "sqs_queue_backlog",
+        "worker_out_of_memory"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "SEV-1",
+        "SEV-2",
+        "SEV-3",
+        "SEV-4"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "access_scope": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "source_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^dataset/.+"
+    },
+    "section": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

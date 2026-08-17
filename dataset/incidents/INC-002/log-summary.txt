@@ -1,0 +1,11 @@
+---
+{"document_id":"INC-002-log-summary","document_type":"log_summary","incident_id":"INC-002","service":"inventory-api","environment":"production","incident_type":"downstream_service_timeout","severity":"SEV-2","occurred_at":"2026-07-15T03:40:00Z","valid_from":"2026-07-15","valid_until":null,"version":1,"access_scope":"inventory-team","source_path":"dataset/incidents/INC-002/log-summary.txt","section":"Distributed Trace and Log Summary"}
+---
+Window: 2026-07-15T03:35:00Z to 2026-07-15T04:05:00Z
+
+- 4,106 inventory requests ended with `SupplierTimeoutException` after 1500ms.
+- Affected trace IDs show `checkout-api → inventory-api → supplier-stock-api`.
+- The supplier span consumed between 1496ms and 1500ms of each affected request.
+- Checkout surfaced the dependency failures as HTTP 504 responses.
+- Inventory ECS task CPU, memory, and running task count remained within their normal ranges.
+- No database connection failure, DNS resolution error, or application startup error was observed.

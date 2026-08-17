@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "document_id": "INC-002-alarm",
+    "document_type": "alarm_summary",
+    "incident_id": "INC-002",
+    "service": "inventory-api",
+    "environment": "production",
+    "incident_type": "downstream_service_timeout",
+    "severity": "SEV-2",
+    "occurred_at": "2026-07-15T03:40:00Z",
+    "valid_from": "2026-07-15",
+    "valid_until": null,
+    "version": 1,
+    "access_scope": "inventory-team",
+    "source_path": "dataset/incidents/INC-002/alarm.json",
+    "section": "Alarm Summary"
+  },
+  "alarm": {
+    "name": "inventory-api-downstream-timeouts-high",
+    "state": "ALARM",
+    "started_at": "2026-07-15T03:40:00Z",
+    "observations": {
+      "supplier_timeout_rate_percent": 31.4,
+      "inventory_api_p95_latency_ms": 1670,
+      "inventory_api_cpu_percent": 37,
+      "checkout_http_504_rate_percent": 12.1
+    },
+    "thresholds": {
+      "supplier_timeout_rate_percent": 5,
+      "supplier_client_timeout_ms": 1500
+    },
+    "summary": "Calls from inventory-api to supplier-stock-api exceeded the 1500ms client timeout. Checkout returned HTTP 504 when synchronous inventory reservation did not complete."
+  }
+}

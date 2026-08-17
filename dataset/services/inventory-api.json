@@ -1,0 +1,19 @@
+{
+  "service": "inventory-api",
+  "runtime": "ecs-fargate-api",
+  "responsibility": "Check and reserve inventory for checkout requests by coordinating with the simulated downstream stock provider.",
+  "dependencies": [
+    "supplier-stock-api"
+  ],
+  "owned_resources": [
+    "inventory-api-ecs-service",
+    "inventory-api-task-definition"
+  ],
+  "signals": [
+    "http_5xx_rate",
+    "http_p95_latency_ms",
+    "downstream_timeout_rate",
+    "ecs_running_task_count"
+  ],
+  "access_scope": "inventory-team"
+}

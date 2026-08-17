@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "document_id": "INC-003-deployment",
+    "document_type": "deployment",
+    "incident_id": "INC-003",
+    "service": "notification-worker",
+    "environment": "production",
+    "incident_type": "sqs_queue_backlog",
+    "severity": "SEV-3",
+    "occurred_at": "2026-07-22T08:30:00Z",
+    "valid_from": "2026-07-22",
+    "valid_until": null,
+    "version": 1,
+    "access_scope": "notifications-team",
+    "source_path": "dataset/incidents/INC-003/deployment.json",
+    "section": "Service Configuration Diff"
+  },
+  "deployment": {
+    "changed_at": "2026-07-22T08:10:00Z",
+    "previous_task_definition": "notification-worker:28",
+    "current_task_definition": "notification-worker:29",
+    "configuration_diff": {
+      "desired_count": {
+        "before": 6,
+        "after": 2
+      },
+      "WORKER_CONCURRENCY": {
+        "before": "12",
+        "after": "12"
+      },
+      "task_memory_mib": {
+        "before": 1024,
+        "after": 1024
+      }
+    },
+    "change_ticket": "CHG-2079",
+    "summary": "A development desired-count value was applied to the production notification-worker service configuration."
+  }
+}

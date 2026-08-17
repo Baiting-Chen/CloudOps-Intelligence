@@ -7,10 +7,25 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
-.env
+venv/
 
 # Node / Next.js
 node_modules/
 .next/
 dist/
 coverage/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Test and coverage output
+.coverage
+coverage.xml
+htmlcov/
+
+# Static analysis caches
+.mypy_cache/
+.ruff_cache/
+
