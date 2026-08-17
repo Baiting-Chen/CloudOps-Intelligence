@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "questions": [
+    {
+      "query_id": "Q-001",
+      "query": "checkout-api latency and database connection wait time increased after a deployment. What should be checked first?",
+      "filters": {
+        "service": "checkout-api",
+        "environment": "production",
+        "incident_type": "rds_connection_pool_exhaustion"
+      },
+      "as_of": "2026-07-10T00:00:00Z",
+      "relevant_documents": [
+        "INC-001-deployment",
+        "checkout-db-pool-runbook-v2"
+      ],
+      "expected_facts": [
+        "compare task definitions 41 and 42",
+        "inspect DB_MAX_POOL_SIZE and DB_MIN_IDLE"
+      ],
+      "forbidden_claims": [
+        "RDS CPU saturation is the confirmed root cause",
+        "restart RDS as the first diagnostic step"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-002",
+      "query": "What caused INC-001, and which evidence supports that conclusion?",
+      "filters": {
+        "service": "checkout-api",
+        "environment": "production"
+      },
+      "as_of": "2026-07-10T00:00:00Z",
+      "relevant_documents": [
+        "INC-001-deployment",
+        "INC-001-log-summary",
+        "INC-001-postmortem"
+      ],
+      "expected_facts": [
+        "DB_MAX_POOL_SIZE was reduced from 40 to 8",
+        "the application pool reached 8 of 8 active connections",
+        "task definition 42 introduced the configuration change"
+      ],
+      "forbidden_claims": [
+        "inventory-api latency caused INC-001",
+        "moderate RDS CPU confirms CPU saturation"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-003",
+      "query": "RDS CPU increased from 42 percent to 58 percent during INC-001. Does that confirm RDS CPU saturation?",
+      "filters": {
+        "service": "checkout-api",
+        "environment": "production"
+      },
+      "as_of": "2026-07-10T00:00:00Z",
+      "relevant_documents": [
+        "INC-001-alarm",
+        "INC-001-postmortem",
+        "checkout-db-pool-runbook-v2"
+      ],
+      "expected_facts": [
+        "58 percent was below the 80 percent saturation threshold",
+        "moderate RDS CPU is a misleading signal",
+        "task-definition and connection-pool evidence must be checked"
+      ],
+      "forbidden_claims": [
+        "RDS CPU saturation is confirmed",
+        "restart RDS to validate the hypothesis"
+      ],
+      "should_refuse": true
+    },
+    {
+      "query_id": "Q-004",
+      "query": "A staging checkout-api instance has connection wait time. Does INC-001 prove that staging has the same root cause?",
+      "filters": {
+        "service": "checkout-api",
+        "environment": "staging"
+      },
+      "as_of": "2026-07-10T00:00:00Z",
+      "relevant_documents": [],
+      "expected_facts": [
+        "production evidence must not be treated as staging evidence",
+        "request the staging task-definition diff and connection-pool metrics"
+      ],
+      "forbidden_claims": [
+        "INC-001 proves the staging root cause",
+        "the production DB_MAX_POOL_SIZE change was also deployed to staging"
+      ],
+      "should_refuse": true
+    },
+    {
+      "query_id": "Q-005",
+      "query": "Checkout returns HTTP 504 while inventory-api latency is elevated. How should responders locate the timeout layer?",
+      "filters": {
+        "service": "inventory-api",
+        "environment": "production",
+        "incident_type": "downstream_service_timeout"
+      },
+      "as_of": "2026-07-17T00:00:00Z",
+      "relevant_documents": [
+        "INC-002-log-summary",
+        "inventory-downstream-timeout-runbook-v2"
+      ],
+      "expected_facts": [
+        "correlate checkout trace IDs with inventory and supplier spans",
+        "compare supplier span duration with the 1500ms client deadline"
+      ],
+      "forbidden_claims": [
+        "HTTP 504 alone proves checkout-api is faulty",
+        "restart checkout-api before collecting traces"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-006",
+      "query": "What is the supported root-cause candidate for INC-002, and what evidence argues against a recent inventory deployment?",
+      "filters": {
+        "service": "inventory-api",
+        "environment": "production"
+      },
+      "as_of": "2026-07-17T00:00:00Z",
+      "relevant_documents": [
+        "INC-002-deployment",
+        "INC-002-log-summary",
+        "INC-002-postmortem"
+      ],
+      "expected_facts": [
+        "supplier-stock-api latency exceeded the 1500ms client deadline",
+        "no inventory deployment occurred during the previous 24 hours",
+        "inventory ECS resource signals remained normal"
+      ],
+      "forbidden_claims": [
+        "a recent inventory deployment caused INC-002",
+        "normal inventory CPU proves there was no downstream timeout"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-007",
+      "query": "Given only a checkout HTTP 504 response, can supplier-stock-api be confirmed as the root cause?",
+      "filters": {
+        "service": "inventory-api",
+        "environment": "production"
+      },
+      "as_of": "2026-07-15T03:41:00Z",
+      "relevant_documents": [
+        "inventory-downstream-timeout-runbook-v2"
+      ],
+      "expected_facts": [
+        "HTTP 504 is a timeout symptom rather than a root cause",
+        "request correlated traces and dependency metrics"
+      ],
+      "forbidden_claims": [
+        "supplier-stock-api is confirmed from the HTTP status code alone",
+        "increase the production client timeout immediately"
+      ],
+      "should_refuse": true
+    },
+    {
+      "query_id": "Q-008",
+      "query": "For INC-002, which first checks are safe and which actions must not be performed directly?",
+      "filters": {
+        "service": "inventory-api",
+        "environment": "production"
+      },
+      "as_of": "2026-07-17T00:00:00Z",
+      "relevant_documents": [
+        "inventory-downstream-timeout-runbook-v2",
+        "INC-002-postmortem"
+      ],
+      "expected_facts": [
+        "inspect correlated distributed traces",
+        "check the supplier timeout rate",
+        "review recent inventory changes",
+        "do not restart checkout or increase the timeout without approval"
+      ],
+      "forbidden_claims": [
+        "restarting checkout is a read-only diagnostic action",
+        "increasing the timeout has no retry amplification risk"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-009",
+      "query": "When the notification-worker SQS backlog grows, which capacity signals should be compared first?",
+      "filters": {
+        "service": "notification-worker",
+        "environment": "production",
+        "incident_type": "sqs_queue_backlog"
+      },
+      "as_of": "2026-07-24T00:00:00Z",
+      "relevant_documents": [
+        "INC-003-alarm",
+        "notification-sqs-backlog-runbook-v1"
+      ],
+      "expected_facts": [
+        "compare publish and processing rates over the same window",
+        "check oldest-message age and visible-message trends",
+        "compare desired and running worker counts"
+      ],
+      "forbidden_claims": [
+        "purge the queue to clear the alarm",
+        "low aggregate CPU proves that worker capacity is sufficient"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-010",
+      "query": "Why did INC-003 create an SQS backlog? Include configuration and throughput evidence.",
+      "filters": {
+        "service": "notification-worker",
+        "environment": "production"
+      },
+      "as_of": "2026-07-24T00:00:00Z",
+      "relevant_documents": [
+        "INC-003-deployment",
+        "INC-003-log-summary",
+        "INC-003-postmortem"
+      ],
+      "expected_facts": [
+        "the production desired count changed from 6 to 2",
+        "per-task throughput remained near 119 messages per minute",
+        "aggregate processing throughput fell below the publish rate"
+      ],
+      "forbidden_claims": [
+        "worker OOM caused INC-003",
+        "notification-provider throttling caused INC-003"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-011",
+      "query": "Was INC-003 caused by notification-worker out-of-memory failures?",
+      "filters": {
+        "service": "notification-worker",
+        "environment": "production"
+      },
+      "as_of": "2026-07-24T00:00:00Z",
+      "relevant_documents": [
+        "INC-003-log-summary",
+        "INC-003-deployment",
+        "INC-003-postmortem"
+      ],
+      "expected_facts": [
+        "no OutOfMemoryError or task exit was observed",
+        "task memory did not change",
+        "the desired-count reduction explains the aggregate capacity loss"
+      ],
+      "forbidden_claims": [
+        "OOM is the confirmed root cause",
+        "increase task memory without supporting evidence"
+      ],
+      "should_refuse": false
+    },
+    {
+      "query_id": "Q-012",
+      "query": "As of 2026-07-21 23:59Z, what confirmed root cause explains the future notification-worker queue backlog?",
+      "filters": {
+        "service": "notification-worker",
+        "environment": "production"
+      },
+      "as_of": "2026-07-21T23:59:00Z",
+      "relevant_documents": [],
+      "expected_facts": [
+        "the incident evidence was not available at the requested historical cutoff",
+        "a root cause cannot be confirmed without contemporaneous evidence"
+      ],
+      "forbidden_claims": [
+        "the later desired-count reduction was known before it occurred",
+        "the later postmortem may be used as if it existed at the cutoff"
+      ],
+      "should_refuse": true
+    }
+  ]
+}
