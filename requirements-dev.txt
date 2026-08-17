@@ -1,0 +1,2 @@
+# Development-only dependencies for running the local test suite.
+pytest==9.1.1
